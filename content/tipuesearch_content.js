@@ -1,1 +1,1 @@
-var tipuesearch = {"pages": [{'title': '個人網站', 'text': '..', 'tags': '', 'url': '個人網站.html'}]};
+var tipuesearch = {"pages": [{'title': '個人網站', 'text': '..test', 'tags': '', 'url': '個人網站.html'}]};
