@@ -1,1 +1,1 @@
-var tipuesearch = {"pages": [{'title': '個人網站', 'text': '..test', 'tags': '', 'url': '個人網站.html'}]};
+var tipuesearch = {"pages": [{'title': '個人網站', 'text': '..test \n', 'tags': '', 'url': '個人網站.html'}, {'title': '二下', 'text': '', 'tags': '', 'url': '二下.html'}, {'title': 'arduino 機械手臂', 'text': 'https://github.com/Blinhy0131/Arduino-robot-arm \n', 'tags': '', 'url': 'arduino 機械手臂.html'}, {'title': '電腦輔助設計實習', 'text': '..', 'tags': '', 'url': '電腦輔助設計實習.html'}]};
