@@ -2,7 +2,7 @@
         <head>
         <title>CMSiMDE</title>
         <meta charset="utf-8">
-<meta property="head" content="H1">
+<meta property="head" content="H3">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700,900" rel="stylesheet">
         <link rel="stylesheet" href="./../cmsimde/static/chimper/fonts/icomoon/style.css">
@@ -134,8 +134,17 @@ img.add_border {
           </div>
           
         </header>
-    <div id="tipue_search_content">個人網站 << <a href='個人網站.html'>Previous</a> <a href='arduino 機械手臂.html'>Next</a> >> arduino 機械手臂<br /><h1>二下</h1>
-<br />個人網站 << <a href='個人網站.html'>Previous</a> <a href='arduino 機械手臂.html'>Next</a> >> arduino 機械手臂</div>
+    <div id="tipue_search_content">CODE 指令解說 << <a href='CODE 指令解說.html'>Previous</a> <a href='機械手臂設定範例.html'>Next</a> >> 機械手臂設定範例<br /><h1>remoteApi python 指令對照</h1>
+<p><strong>1.simxGetObjectHandle</strong></p>
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">ret,XXX=vrep.simxGetObjectHandle(clientID,"joint",opmode)</pre>
+<p><span>XXX為一個自行定義的名詞，此指令為定義XXX為一個連接軸，而('joint')為該軸在場景裡面的名稱</span></p>
+<p>與Lua語法類似</p>
+<p><strong>2.simxSetJointTargetPosition</strong></p>
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false"> vrep.simxSetJointTargetPosition(clientID,XXX,90,opmode)</pre>
+<p>講解 XXX移動至90這個位置，或旋轉至90rad，XXX請參見第一個指令講解,角度預設為RAD</p>
+<p>若要需求為旋轉至90deg，指令參考如下</p>
+<p><span>與Lua語法類似</span></p>
+<br />CODE 指令解說 << <a href='CODE 指令解說.html'>Previous</a> <a href='機械手臂設定範例.html'>Next</a> >> 機械手臂設定範例</div>
         
     <!-- footer -->
       <div class="container">

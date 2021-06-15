@@ -2,7 +2,7 @@
         <head>
         <title>CMSiMDE</title>
         <meta charset="utf-8">
-<meta property="head" content="H1">
+<meta property="head" content="H3">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700,900" rel="stylesheet">
         <link rel="stylesheet" href="./../cmsimde/static/chimper/fonts/icomoon/style.css">
@@ -134,8 +134,19 @@ img.add_border {
           </div>
           
         </header>
-    <div id="tipue_search_content">個人網站 << <a href='個人網站.html'>Previous</a> <a href='arduino 機械手臂.html'>Next</a> >> arduino 機械手臂<br /><h1>二下</h1>
-<br />個人網站 << <a href='個人網站.html'>Previous</a> <a href='arduino 機械手臂.html'>Next</a> >> arduino 機械手臂</div>
+    <div id="tipue_search_content">CoppeliaSim 教學 << <a href='CoppeliaSim 教學.html'>Previous</a> <a href='直線運動教學.html'>Next</a> >> 直線運動教學<br /><h1>軸的旋轉教學</h1>
+<p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/-8QNOsZnV1c" width="560"></iframe></p>
+<p>程式碼</p>
+<pre class="brush:lua;auto-links:false;toolbar:false" contenteditable="false">function sysCall_init()
+    -- do some initialization here
+    joint=sim.getObjectHandle('joint01')
+end
+
+function sysCall_actuation()
+    -- put your actuation code here
+    sim.setJointTargetPosition(joint,135*math.pi/180)
+end</pre>
+<br />CoppeliaSim 教學 << <a href='CoppeliaSim 教學.html'>Previous</a> <a href='直線運動教學.html'>Next</a> >> 直線運動教學</div>
         
     <!-- footer -->
       <div class="container">

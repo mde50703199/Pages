@@ -2,7 +2,7 @@
         <head>
         <title>CMSiMDE</title>
         <meta charset="utf-8">
-<meta property="head" content="H1">
+<meta property="head" content="H3">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700,900" rel="stylesheet">
         <link rel="stylesheet" href="./../cmsimde/static/chimper/fonts/icomoon/style.css">
@@ -134,8 +134,56 @@ img.add_border {
           </div>
           
         </header>
-    <div id="tipue_search_content">個人網站 << <a href='個人網站.html'>Previous</a> <a href='arduino 機械手臂.html'>Next</a> >> arduino 機械手臂<br /><h1>二下</h1>
-<br />個人網站 << <a href='個人網站.html'>Previous</a> <a href='arduino 機械手臂.html'>Next</a> >> arduino 機械手臂</div>
+    <div id="tipue_search_content">對軸進行旋轉控制 << <a href='對軸進行旋轉控制.html'>Previous</a> <a href='物件螺旋運動.html'>Next</a> >> 物件螺旋運動<br /><h1>對方快進行XYZ軸控制</h1>
+<p></p>
+<p>建立方塊並且對其進行XYZ軸控制</p>
+<p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/d_3A25jRKEs" width="560"></iframe></p>
+<p></p>
+<p>程式碼如下</p>
+<pre class="brush:lua;auto-links:false;toolbar:false" contenteditable="false">function sysCall_init()
+    joint01=sim.getObjectHandle('joint01')
+    joint02=sim.getObjectHandle('joint02')
+    joint03=sim.getObjectHandle('joint03')
+    set=0
+    set1=0
+    set2=0
+end
+
+function sysCall_actuation()
+    -- put your actuation code here
+    message,auxiliaryData=sim.getSimulatorMessage()
+    while message~=-1 do
+        if (message==sim.message_keypress) then
+            if (auxiliaryData[1]==2009) then
+                set=set+0.01
+                sim.setJointTargetPosition(joint01,set)
+            end
+            if (auxiliaryData[1]==2010) then
+                set=set-0.01
+                sim.setJointTargetPosition(joint01,set)
+            end
+            if (auxiliaryData[1]==2007) then
+               set1=set1+0.01
+               sim.setJointTargetPosition(joint02,set1)
+            end
+           if (auxiliaryData[1]==2008) then
+              set1=set1-0.01
+              sim.setJointTargetPosition(joint02,set1)
+            end
+            if (auxiliaryData[1]==50) then
+               set2=set2+0.01
+               sim.setJointTargetPosition(joint03,set2)
+            end
+           if (auxiliaryData[1]==56) then
+              set2=set2-0.01
+              sim.setJointTargetPosition(joint03,set2)
+            end
+        end
+    message,auxiliaryData=sim.getSimulatorMessage()
+    end
+end</pre>
+<p></p>
+<br />對軸進行旋轉控制 << <a href='對軸進行旋轉控制.html'>Previous</a> <a href='物件螺旋運動.html'>Next</a> >> 物件螺旋運動</div>
         
     <!-- footer -->
       <div class="container">

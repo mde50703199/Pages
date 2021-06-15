@@ -2,7 +2,7 @@
         <head>
         <title>CMSiMDE</title>
         <meta charset="utf-8">
-<meta property="head" content="H1">
+<meta property="head" content="H3">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700,900" rel="stylesheet">
         <link rel="stylesheet" href="./../cmsimde/static/chimper/fonts/icomoon/style.css">
@@ -134,8 +134,69 @@ img.add_border {
           </div>
           
         </header>
-    <div id="tipue_search_content">個人網站 << <a href='個人網站.html'>Previous</a> <a href='arduino 機械手臂.html'>Next</a> >> arduino 機械手臂<br /><h1>二下</h1>
-<br />個人網站 << <a href='個人網站.html'>Previous</a> <a href='arduino 機械手臂.html'>Next</a> >> arduino 機械手臂</div>
+    <div id="tipue_search_content">3D列印機_控制高度 << <a href='3D列印機_控制高度.html'>Previous</a> <a href='架設機械手臂場景.html'>Next</a> >> 架設機械手臂場景<br /><h1>衝擊試驗機</h1>
+<p>控制說明</p>
+<p>請依序按下1~4</p>
+<p>分別為上升、落下、往下、接合</p>
+<p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/EJ-4jpUNIoc" width="560"></iframe></p>
+<p></p>
+<p>程式碼參考</p>
+<pre class="brush:lua;auto-links:false;toolbar:false" contenteditable="false">function sysCall_init()
+    -- do some initialization here
+    jointY=sim.getObjectHandle('Prismatic_joint')
+    joint1=sim.getObjectHandle('Prismatic_joint0')
+    joint2=sim.getObjectHandle('Prismatic_joint1')
+    cont=1
+end
+
+function sysCall_actuation()
+    -- put your actuation code here
+    message,auxiliaryData=sim.getSimulatorMessage()
+    while message~=-1 do
+        if (message==sim.message_keypress) then
+            if (auxiliaryData[1]==49) then
+                if (cont==1) then
+                    sim.setJointTargetPosition(jointY,40)
+                    cont=2
+                end
+            end
+            if (auxiliaryData[1]==50) then
+                if (cont==2) then
+                    sim.setJointTargetPosition(joint1,0.1)
+                    sim.setJointTargetPosition(joint2,-0.1)
+                    cont=3
+                end
+            end
+            if (auxiliaryData[1]==51) then
+                if (cont==3) then
+                    sim.setJointTargetPosition(jointY,0)
+                    cont=4
+                end
+            end
+            if (auxiliaryData[1]==52) then
+                if (cont==4) then
+                    sim.setJointTargetPosition(joint1,0)
+                    sim.setJointTargetPosition(joint2,0)
+                    cont=1
+                end
+            end
+         end
+    message,auxiliaryData=sim.getSimulatorMessage()
+    end
+end
+
+function sysCall_sensing()
+    -- put your sensing code here
+end
+
+function sysCall_cleanup()
+    -- do some clean-up here
+end
+
+-- See the user manual or the available code snippets for additional callback functions and details
+</pre>
+<p></p>
+<br />3D列印機_控制高度 << <a href='3D列印機_控制高度.html'>Previous</a> <a href='架設機械手臂場景.html'>Next</a> >> 架設機械手臂場景</div>
         
     <!-- footer -->
       <div class="container">

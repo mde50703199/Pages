@@ -2,7 +2,7 @@
         <head>
         <title>CMSiMDE</title>
         <meta charset="utf-8">
-<meta property="head" content="H1">
+<meta property="head" content="H2">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700,900" rel="stylesheet">
         <link rel="stylesheet" href="./../cmsimde/static/chimper/fonts/icomoon/style.css">
@@ -134,8 +134,29 @@ img.add_border {
           </div>
           
         </header>
-    <div id="tipue_search_content">個人網站 << <a href='個人網站.html'>Previous</a> <a href='arduino 機械手臂.html'>Next</a> >> arduino 機械手臂<br /><h1>二下</h1>
-<br />個人網站 << <a href='個人網站.html'>Previous</a> <a href='arduino 機械手臂.html'>Next</a> >> arduino 機械手臂</div>
+    <div id="tipue_search_content">舊版本 << <a href='舊版本.html'>Previous</a> <a href='控制解說.html'>Next</a> >> 控制解說<br /><h1>尋找控制代碼</h1>
+<p>coppeliasim中</p>
+<p>simGetSimulatorMessage()為讀取鍵盤狀態的指令</p>
+<p>但是我們不知道指令是甚麼，所以寫了一段程式來檢測看每一個按鍵的指令是什麼</p>
+<p>所以寫了這一支程式來檢測每一個按鈕的值</p>
+<p>在coppeliaSim中叫出一個物件，然後對那個物件編寫程式如下</p>
+<p>開始模擬後按下鍵盤鍵即可在下方視窗顯示對應的按鍵</p>
+<p><img alt="" height="449" src="./../images/findcode.jpg" width="800"/></p>
+<p>程式碼如下</p>
+<pre class="brush:lua;auto-links:false;toolbar:false" contenteditable="false">function sysCall_actuation()
+    message,auxiliaryData=simGetSimulatorMessage()
+	while message~=-1 do
+		if (message==sim_message_keypress) then
+			print(auxiliaryData[1])
+			if (auxiliaryData[1]==string.byte(' ')) then
+				-- space key was pressed
+			end
+		end
+		message,auxiliaryData=simGetSimulatorMessage()
+	end
+end</pre>
+<p></p>
+<br />舊版本 << <a href='舊版本.html'>Previous</a> <a href='控制解說.html'>Next</a> >> 控制解說</div>
         
     <!-- footer -->
       <div class="container">
