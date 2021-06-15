@@ -15,344 +15,11 @@
 <p><img caption="false" height="429" src="/images/機械手臂電路.jpg" width="800"/></p>
 <p></p>
 <h1>CoppliaSim程式模擬</h1>
-<h2>CoppeliaSim 教學</h2>
-<h3>軸的旋轉教學</h3>
-<p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/-8QNOsZnV1c" width="560"></iframe></p>
-<p>程式碼</p>
-<pre class="brush:lua;auto-links:false;toolbar:false" contenteditable="false">function sysCall_init()
-    -- do some initialization here
-    joint=sim.getObjectHandle('joint01')
-end
-
-function sysCall_actuation()
-    -- put your actuation code here
-    sim.setJointTargetPosition(joint,135*math.pi/180)
-end</pre>
-<h3>直線運動教學</h3>
-<p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/KHClnqMEHfU" width="560"></iframe></p>
-<p>程式指令</p>
-<pre class="brush:lua;auto-links:false;toolbar:false" contenteditable="false">function sysCall_init()
-    -- do some initialization here
-    joint=sim.getObjectHandle('joint')
-end
-
-function sysCall_actuation()
-    -- put your actuation code here
-    sim.setJointTargetPosition(joint,50)
-end</pre>
-<h3>1-單軸直線運動</h3>
-<p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/ZbITEg3IuAc" width="560"></iframe></p>
-<p>程式碼</p>
-<pre class="brush:lua;auto-links:false;toolbar:false" contenteditable="false">function sysCall_init()
-    -- do some initialization here
-    joint=sim.getObjectHandle('joint')
-    set=0
-end
- 
-function sysCall_actuation()
-    -- put your actuation code here
-    message,auiliaryData=sim.getSimulatorMessage()
-    while message~=-1 do
-        if(message==sim.message_keypress)then
-            if(auiliaryData[1]==2009)then
-                set=set+0.01
-                sim.setJointTargetPosition(joint,set)
-            end
-        end
-    message,auiliaryData=sim.getSimulatorMessage()
-    end
-end</pre>
-<p></p>
-<h3>2-可變速之旋轉運動</h3>
-<p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/7ui7HK5A3l4" width="560"></iframe></p>
-<p>程式碼  (注:下方程式碼有修改 degset(每次旋轉的角度)不會小於1</p>
-<pre class="brush:lua;auto-links:false;toolbar:false" contenteditable="false">function sysCall_init()
-    -- do some initialization here
-    joint=sim.getObjectHandle('joint')
-    set=0
-    degset=1
-end
- 
-function sysCall_actuation()
-    -- put your actuation code here
-    message,auxiliaryData=sim.getSimulatorMessage()
-    while message~=-1 do
-        if (message==sim.message_keypress) then
-            if (auxiliaryData[1]==2009) then
-            set=set+degset
-            sim.setJointTargetPosition(joint,set*math.pi/180)
-            end
-            if (auxiliaryData[1]==2010) then
-            set=set-degset
-            sim.setJointTargetPosition(joint,set*math.pi/180)
-            end
-            if (auxiliaryData[1]==2007) then
-                degset=degset+5
-                print(degset)
-            end
-            if (auxiliaryData[1]==2008) then
-                degset=degset-5
-                if(degset&lt;1) then
-                    degset=1
-                end
-                print(degset)
-            end
-        end
-    message,auxiliaryData=sim.getSimulatorMessage()
-    end
-end
-    </pre>
-<h3>3-遙控攝影小汽車</h3>
-<p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/nNmpBqzVHT0" width="560"></iframe></p>
-<p>範例程式碼</p>
-<pre class="brush:lua;auto-links:false;toolbar:false" contenteditable="false">function sysCall_init()
-    -- do some initialization here
-    f=sim.getObjectHandle('F')
-    r=sim.getObjectHandle('R')
-    speedf=10
-    speedr=10
-    Cam1=sim.getObjectHandle('Camera')
-    CamView1=sim.floatingViewAdd(0.2,0.8,0.5,0.5,0)
-    sim.adjustView(CamView1,Cam1,64)
-end
-
-function sysCall_cleanup() 
-    sim.floatingViewRemove(CamView1)
-end 
- 
-function sysCall_actuation()
-    -- put your actuation code here
-    message,auxiliaryData=sim.getSimulatorMessage()
-    while message~=-1 do
-        if (message==sim.message_keypress) then
-            if (auxiliaryData[1]==2007) then
-                speedf=speedf-30
-                speedr=speedr-30
-                sim.setJointTargetPosition(f,speedf*math.pi/180)
-                sim.setJointTargetPosition(r,speedr*math.pi/180)
-            end
-            if (auxiliaryData[1]==2008) then
-                speedf=speedf+30
-                speedr=speedr+30
-                sim.setJointTargetPosition(f,speedf*math.pi/180)
-                sim.setJointTargetPosition(r,speedr*math.pi/180)
-            end
-            if (auxiliaryData[1]==2009) then
-                speedr=speedr-30
-                sim.setJointTargetPosition(r,speedr*math.pi/180)
-            end
-            if (auxiliaryData[1]==2010) then
-                speedf=speedf-30
-                sim.setJointTargetPosition(f,speedf*math.pi/180)
-            end
-        end
-    message,auxiliaryData=sim.getSimulatorMessage()
-    end
-end</pre>
-<p></p>
-<h3>CODE 指令解說</h3>
-<p>部分LUA指令講解</p>
-<p><strong>1.sim.getObjectHandle</strong></p>
-<p>使用範例如下</p>
-<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">XXX=sim.getObjectHandle('joint')</pre>
-<p>講解 XXX為一個自行定義的名詞，此指令為定義XXX為一個連接軸，而('joint')為該軸在場景裡面的名稱</p>
-<p></p>
-<p><strong>2.sim.setJointTargetPosition</strong></p>
-<p><span>使用範例如下</span></p>
-<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">sim.setJointTargetPosition(XXX,90)</pre>
-<p>講解 XXX移動至90這個位置，或旋轉至90rad，XXX請參見第一個指令講解,角度預設為RAD</p>
-<p>若要需求為旋轉至90deg，指令參考如下</p>
-<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">sim.setJointTargetPosition(XXX,90*math.pi/180)</pre>
-<p></p>
-<p><strong>3.sim.getSimulatorMessage</strong></p>
-<p>使用範例如下</p>
-<pre class="brush:lua;auto-links:false;toolbar:false" contenteditable="false">message,auxiliaryData=sim.getSimulatorMessage()
-while message~=-1 do
-        if (message==sim.message_keypress) then
-            if (auxiliaryData[1]==2009) then
-               指定要做的事情
-            end
-         end
-message,auxiliaryData=sim.getSimulatorMessage()
-end
-</pre>
-<p></p>
-<p>講解</p>
-<p>第一行</p>
-<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">message,auxiliaryData=sim.getSimulatorMessage()</pre>
-<p>message代表跟鍵盤對接的狀態</p>
-<p>auxiliaryData代表讀取到鍵盤的值</p>
-<p>第二行的開始</p>
-<p>當(while)"message的值不等於-1時</p>
-<p>若(if)<span>auxiliaryData讀取到的值為2009</span></p>
-<p><span>進行要做的事情，可以是上面第二項"sim.setJointTargetPosition"或其他指令</span></p>
-<p><span>可參考<a href="https://40823225.github.io/stage3-bg6/content/%E5%B0%8B%E6%89%BE%E6%8E%A7%E5%88%B6%E4%BB%A3%E7%A2%BC.html">尋找控制代碼</a></span></p>
-<p><span></span></p>
-<p><strong>4.simwat</strong></p>
-<p><span>使用範例</span></p>
-<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">sim.wait(0.01)</pre>
-<p>只能在線程控制中使用(Threaded chil script)</p>
-<p>為暫停指令，括弧內單位為秒</p>
-<h3>remoteApi python 指令對照</h3>
-<p><strong>1.simxGetObjectHandle</strong></p>
-<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">ret,XXX=vrep.simxGetObjectHandle(clientID,"joint",opmode)</pre>
-<p><span>XXX為一個自行定義的名詞，此指令為定義XXX為一個連接軸，而('joint')為該軸在場景裡面的名稱</span></p>
-<p>與Lua語法類似</p>
-<p><strong>2.simxSetJointTargetPosition</strong></p>
-<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false"> vrep.simxSetJointTargetPosition(clientID,XXX,90,opmode)</pre>
-<p>講解 XXX移動至90這個位置，或旋轉至90rad，XXX請參見第一個指令講解,角度預設為RAD</p>
-<p>若要需求為旋轉至90deg，指令參考如下</p>
-<p><span>與Lua語法類似</span></p>
-<h3>機械手臂設定範例</h3>
-<p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/s8eRsonlKHo" width="560"></iframe></p>
-<p></p>
-<h3>按鍵控制代碼</h3>
-<table border="1" cellpadding="0" cellspacing="0" style="width: 590px;">
-<tbody>
-<tr style="height: 26px;">
-<td style="width: 40px; height: 26px; text-align: center;"><strong>按鍵</strong></td>
-<td style="width: 71px; height: 26px; text-align: center;">對應代碼</td>
-<td style="width: 34px; height: 26px; text-align: center;"><strong>按鍵</strong></td>
-<td style="width: 69px; height: 26px; text-align: center;"><span>對應代碼</span></td>
-<td style="width: 45px; height: 26px; text-align: center;"><strong>按鍵</strong></td>
-<td style="width: 64px; height: 26px; text-align: center;"><span>對應代碼</span></td>
-<td style="width: 50px; height: 26px; text-align: center;"><strong>按鍵</strong></td>
-<td style="width: 71px; height: 26px; text-align: center;"><span>對應代碼</span></td>
-<td style="width: 42px; height: 26px; text-align: center;"><strong>按鍵</strong></td>
-<td style="width: 62px; height: 26px; text-align: center;"><span>對應代碼</span></td>
-<td style="width: 40.9271px; height: 26px; text-align: center;"><strong>按鍵</strong></td>
-<td style="width: 74.0729px; height: 26px; text-align: center;"><span>對應代碼</span></td>
-</tr>
-<tr style="height: 26px;">
-<td style="width: 40px; height: 26px; text-align: center;"><strong>a</strong></td>
-<td style="width: 71px; height: 26px; text-align: center;">97</td>
-<td style="width: 34px; height: 26px; text-align: center;"><strong>j</strong></td>
-<td style="width: 69px; height: 26px; text-align: center;">106</td>
-<td style="width: 45px; height: 26px; text-align: center;"><strong>s</strong></td>
-<td style="width: 64px; height: 26px; text-align: center;">115</td>
-<td style="width: 50px; height: 26px; text-align: center;"><strong>0</strong></td>
-<td style="width: 71px; height: 26px; text-align: center;">48</td>
-<td style="width: 42px; height: 26px; text-align: center;"><strong>9</strong></td>
-<td style="width: 62px; height: 26px; text-align: center;">57</td>
-<td style="width: 40.9271px; height: 26px; text-align: center;"><strong>.</strong></td>
-<td style="width: 74.0729px; height: 26px; text-align: center;">46</td>
-</tr>
-<tr style="height: 26px;">
-<td style="width: 40px; height: 26px; text-align: center;"><strong>b</strong></td>
-<td style="width: 71px; height: 26px; text-align: center;">98</td>
-<td style="width: 34px; height: 26px; text-align: center;"><strong>k</strong></td>
-<td style="width: 69px; height: 26px; text-align: center;">107</td>
-<td style="width: 45px; height: 26px; text-align: center;"><strong>t</strong></td>
-<td style="width: 64px; height: 26px; text-align: center;">116</td>
-<td style="width: 50px; height: 26px; text-align: center;"><strong>1</strong></td>
-<td style="width: 71px; height: 26px; text-align: center;">49</td>
-<td style="width: 42px; height: 26px; text-align: center;"><strong>+</strong></td>
-<td style="width: 62px; height: 26px; text-align: center;">43</td>
-<td style="width: 40.9271px; height: 26px; text-align: center;"><strong>;</strong></td>
-<td style="width: 74.0729px; height: 26px; text-align: center;">59</td>
-</tr>
-<tr style="height: 26px;">
-<td style="width: 40px; height: 26px; text-align: center;"><strong>c</strong></td>
-<td style="width: 71px; height: 26px; text-align: center;">99</td>
-<td style="width: 34px; height: 26px; text-align: center;"><strong>l</strong></td>
-<td style="width: 69px; height: 26px; text-align: center;">108</td>
-<td style="width: 45px; height: 26px; text-align: center;"><strong>u</strong></td>
-<td style="width: 64px; height: 26px; text-align: center;">117</td>
-<td style="width: 50px; height: 26px; text-align: center;"><strong>2</strong></td>
-<td style="width: 71px; height: 26px; text-align: center;">50</td>
-<td style="width: 42px; height: 26px; text-align: center;"><strong>-</strong></td>
-<td style="width: 62px; height: 26px; text-align: center;">45</td>
-<td style="width: 40.9271px; height: 26px; text-align: center;"><strong>'</strong></td>
-<td style="width: 74.0729px; height: 26px; text-align: center;">39</td>
-</tr>
-<tr style="height: 26px;">
-<td style="width: 40px; height: 26px; text-align: center;"><strong>d</strong></td>
-<td style="width: 71px; height: 26px; text-align: center;">100</td>
-<td style="width: 34px; height: 26px; text-align: center;"><strong>m</strong></td>
-<td style="width: 69px; height: 26px; text-align: center;">109</td>
-<td style="width: 45px; height: 26px; text-align: center;"><strong>v</strong></td>
-<td style="width: 64px; height: 26px; text-align: center;">118</td>
-<td style="width: 50px; height: 26px; text-align: center;"><strong>3</strong></td>
-<td style="width: 71px; height: 26px; text-align: center;">51</td>
-<td style="width: 42px; height: 26px; text-align: center;"><strong>*</strong></td>
-<td style="width: 62px; height: 26px; text-align: center;">42</td>
-<td style="width: 40.9271px; height: 26px; text-align: center;"><strong>[</strong></td>
-<td style="width: 74.0729px; height: 26px; text-align: center;">91</td>
-</tr>
-<tr style="height: 28px;">
-<td style="width: 40px; height: 28px; text-align: center;"><strong>e</strong></td>
-<td style="width: 71px; height: 28px; text-align: center;">101</td>
-<td style="width: 34px; height: 28px; text-align: center;"><strong>n</strong></td>
-<td style="width: 69px; height: 28px; text-align: center;">110</td>
-<td style="width: 45px; height: 28px; text-align: center;"><strong>w</strong></td>
-<td style="width: 64px; height: 28px; text-align: center;">119</td>
-<td style="width: 50px; height: 28px; text-align: center;"><strong>4</strong></td>
-<td style="width: 71px; height: 28px; text-align: center;">52</td>
-<td style="width: 42px; height: 28px; text-align: center;"><strong>/</strong></td>
-<td style="width: 62px; height: 28px; text-align: center;">47</td>
-<td style="width: 40.9271px; height: 28px; text-align: center;"><strong>]</strong></td>
-<td style="width: 74.0729px; height: 28px; text-align: center;">93</td>
-</tr>
-<tr style="height: 28.1597px;">
-<td style="width: 40px; height: 28.1597px; text-align: center;"><strong>f</strong></td>
-<td style="width: 71px; height: 28.1597px; text-align: center;">102</td>
-<td style="width: 34px; height: 28.1597px; text-align: center;"><strong>o</strong></td>
-<td style="width: 69px; height: 28.1597px; text-align: center;">111</td>
-<td style="width: 45px; height: 28.1597px; text-align: center;"><strong>x</strong></td>
-<td style="width: 64px; height: 28.1597px; text-align: center;">120</td>
-<td style="width: 50px; height: 28.1597px; text-align: center;"><strong>5</strong></td>
-<td style="width: 71px; height: 28.1597px; text-align: center;">53</td>
-<td style="width: 42px; height: 28.1597px; text-align: center;"><strong>=</strong></td>
-<td style="width: 62px; height: 28.1597px; text-align: center;">61</td>
-<td style="width: 40.9271px; height: 28.1597px; text-align: center;"><strong>方向鍵上</strong></td>
-<td style="width: 74.0729px; height: 28.1597px; text-align: center;">2007</td>
-</tr>
-<tr style="height: 28px;">
-<td style="width: 40px; height: 28px; text-align: center;"><strong>g</strong></td>
-<td style="width: 71px; height: 28px; text-align: center;">103</td>
-<td style="width: 34px; height: 28px; text-align: center;"><strong>p</strong></td>
-<td style="width: 69px; height: 28px; text-align: center;">112</td>
-<td style="width: 45px; height: 28px; text-align: center;"><strong>y</strong></td>
-<td style="width: 64px; height: 28px; text-align: center;">121</td>
-<td style="width: 50px; height: 28px; text-align: center;"><strong>6</strong></td>
-<td style="width: 71px; height: 28px; text-align: center;">54</td>
-<td style="width: 42px; height: 28px; text-align: center;"><strong>`</strong></td>
-<td style="width: 62px; height: 28px; text-align: center;">96</td>
-<td style="width: 40.9271px; height: 28px; text-align: center;"><strong>方向鍵下</strong></td>
-<td style="width: 74.0729px; height: 28px; text-align: center;">2008</td>
-</tr>
-<tr style="height: 28px;">
-<td style="width: 40px; height: 28px; text-align: center;"><strong>h</strong></td>
-<td style="width: 71px; height: 28px; text-align: center;">104</td>
-<td style="width: 34px; height: 28px; text-align: center;"><strong>q</strong></td>
-<td style="width: 69px; height: 28px; text-align: center;">113</td>
-<td style="width: 45px; height: 28px; text-align: center;"><strong>z</strong></td>
-<td style="width: 64px; height: 28px; text-align: center;">122</td>
-<td style="width: 50px; height: 28px; text-align: center;"><strong>7</strong></td>
-<td style="width: 71px; height: 28px; text-align: center;">55</td>
-<td style="width: 42px; height: 28px; text-align: center;"><strong>\</strong></td>
-<td style="width: 62px; height: 28px; text-align: center;">92</td>
-<td style="width: 40.9271px; height: 28px; text-align: center;"><strong>方向鍵左</strong></td>
-<td style="width: 74.0729px; height: 28px; text-align: center;">2009</td>
-</tr>
-<tr style="height: 28px;">
-<td style="width: 40px; height: 28px; text-align: center;"><strong>i</strong></td>
-<td style="width: 71px; height: 28px; text-align: center;">105</td>
-<td style="width: 34px; height: 28px; text-align: center;"><strong>r</strong></td>
-<td style="width: 69px; height: 28px; text-align: center;">114</td>
-<td style="width: 45px; height: 28px; text-align: center;">空白鍵</td>
-<td style="width: 64px; height: 28px; text-align: center;">32</td>
-<td style="width: 50px; height: 28px; text-align: center;"><strong>8</strong></td>
-<td style="width: 71px; height: 28px; text-align: center;">56</td>
-<td style="width: 42px; height: 28px; text-align: center;"><strong>,</strong></td>
-<td style="width: 62px; height: 28px; text-align: center;">44</td>
-<td style="width: 40.9271px; height: 28px; text-align: center;"><strong>方向鍵右</strong></td>
-<td style="width: 74.0729px; height: 28px; text-align: center;">2010</td>
-</tr>
-</tbody>
-</table>
-<p></p>
-<h2>架設場景</h2>
+<p>一開始的時候覺得Coppelasim好像沒有什麼</p>
+<p>但是在越用越多的時候</p>
+<p>發現Coppelasim好像比想像中的還要重要</p>
+<p>可以在電腦模擬出幾近真實的機械手臂運動</p>
+<p>我期許我未來能在自己學習有關Coppeliasim的相關應用</p><h2>架設場景</h2>
 <h3>對軸進行旋轉控制</h3>
 <p>使用coppeliaSim 先叫出一個簡單的軸</p>
 <p>來進行模擬控制</p>
@@ -2722,7 +2389,8 @@ end</pre>
 <p><a href="https://github.com/Blinhy0131/python-remoteApi">https://github.com/Blinhy0131/python-remoteApi</a></p>
 <p>即可順利完成</p>
 <p>註:建議使用Coppeliasim4.1進行編輯模擬</p>
-<p>4.1相對4.2 有比較多的自由度可以編輯</p><h2>機械手臂多人對戰</h2>
+<p>4.1相對4.2 有比較多的自由度可以編輯</p>
+<h2>機械手臂多人對戰</h2>
 <p>圖檔下載</p>
 <p><a href="/downloads/robot arm fight">robot arm fight</a></p>
 <p>場景設定:</p>
@@ -3393,14 +3061,344 @@ int main(){
 <p>..</p>
 <h1>個人紀錄</h1>
 <p>.</p>
-<h2>Coppeliasim 中文教學</h2>
-<p>全中文語系最詳細也是唯一的教學</p>
-<p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/KHClnqMEHfU" width="560"></iframe></p>
+<h2>CoppeliaSim 教學</h2>
+<h3>軸的旋轉教學</h3>
 <p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/-8QNOsZnV1c" width="560"></iframe></p>
+<p>注意事項:在旋轉軸中預設的角度單位為弧度(rad)</p>
+<p>所以在進行旋轉控制的時候要記得轉換成弧度(math.pi/180)</p>
+<p>程式碼</p>
+<pre class="brush:lua;auto-links:false;toolbar:false" contenteditable="false">function sysCall_init()
+    -- do some initialization here
+    joint=sim.getObjectHandle('joint01')
+end
+
+function sysCall_actuation()
+    -- put your actuation code here
+    sim.setJointTargetPosition(joint,135*math.pi/180)
+end</pre><h3>直線運動教學</h3>
+<p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/KHClnqMEHfU" width="560"></iframe></p>
+<p>程式指令</p>
+<pre class="brush:lua;auto-links:false;toolbar:false" contenteditable="false">function sysCall_init()
+    -- do some initialization here
+    joint=sim.getObjectHandle('joint')
+end
+
+function sysCall_actuation()
+    -- put your actuation code here
+    sim.setJointTargetPosition(joint,50)
+end</pre>
+<h3>1-單軸直線運動</h3>
 <p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/ZbITEg3IuAc" width="560"></iframe></p>
+<p>程式碼</p>
+<pre class="brush:lua;auto-links:false;toolbar:false" contenteditable="false">function sysCall_init()
+    -- do some initialization here
+    joint=sim.getObjectHandle('joint')
+    set=0
+end
+ 
+function sysCall_actuation()
+    -- put your actuation code here
+    message,auiliaryData=sim.getSimulatorMessage()
+    while message~=-1 do
+        if(message==sim.message_keypress)then
+            if(auiliaryData[1]==2009)then
+                set=set+0.01
+                sim.setJointTargetPosition(joint,set)
+            end
+        end
+    message,auiliaryData=sim.getSimulatorMessage()
+    end
+end</pre>
+<p></p>
+<h3>2-可變速之旋轉運動</h3>
 <p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/7ui7HK5A3l4" width="560"></iframe></p>
+<p>程式碼  (注:下方程式碼有修改 degset(每次旋轉的角度)不會小於1</p>
+<pre class="brush:lua;auto-links:false;toolbar:false" contenteditable="false">function sysCall_init()
+    -- do some initialization here
+    joint=sim.getObjectHandle('joint')
+    set=0
+    degset=1
+end
+ 
+function sysCall_actuation()
+    -- put your actuation code here
+    message,auxiliaryData=sim.getSimulatorMessage()
+    while message~=-1 do
+        if (message==sim.message_keypress) then
+            if (auxiliaryData[1]==2009) then
+            set=set+degset
+            sim.setJointTargetPosition(joint,set*math.pi/180)
+            end
+            if (auxiliaryData[1]==2010) then
+            set=set-degset
+            sim.setJointTargetPosition(joint,set*math.pi/180)
+            end
+            if (auxiliaryData[1]==2007) then
+                degset=degset+5
+                print(degset)
+            end
+            if (auxiliaryData[1]==2008) then
+                degset=degset-5
+                if(degset&lt;1) then
+                    degset=1
+                end
+                print(degset)
+            end
+        end
+    message,auxiliaryData=sim.getSimulatorMessage()
+    end
+end
+    </pre>
+<h3>3-遙控攝影小汽車</h3>
 <p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/nNmpBqzVHT0" width="560"></iframe></p>
+<p>範例程式碼</p>
+<pre class="brush:lua;auto-links:false;toolbar:false" contenteditable="false">function sysCall_init()
+    -- do some initialization here
+    f=sim.getObjectHandle('F')
+    r=sim.getObjectHandle('R')
+    speedf=10
+    speedr=10
+    Cam1=sim.getObjectHandle('Camera')
+    CamView1=sim.floatingViewAdd(0.2,0.8,0.5,0.5,0)
+    sim.adjustView(CamView1,Cam1,64)
+end
+
+function sysCall_cleanup() 
+    sim.floatingViewRemove(CamView1)
+end 
+ 
+function sysCall_actuation()
+    -- put your actuation code here
+    message,auxiliaryData=sim.getSimulatorMessage()
+    while message~=-1 do
+        if (message==sim.message_keypress) then
+            if (auxiliaryData[1]==2007) then
+                speedf=speedf-30
+                speedr=speedr-30
+                sim.setJointTargetPosition(f,speedf*math.pi/180)
+                sim.setJointTargetPosition(r,speedr*math.pi/180)
+            end
+            if (auxiliaryData[1]==2008) then
+                speedf=speedf+30
+                speedr=speedr+30
+                sim.setJointTargetPosition(f,speedf*math.pi/180)
+                sim.setJointTargetPosition(r,speedr*math.pi/180)
+            end
+            if (auxiliaryData[1]==2009) then
+                speedr=speedr-30
+                sim.setJointTargetPosition(r,speedr*math.pi/180)
+            end
+            if (auxiliaryData[1]==2010) then
+                speedf=speedf-30
+                sim.setJointTargetPosition(f,speedf*math.pi/180)
+            end
+        end
+    message,auxiliaryData=sim.getSimulatorMessage()
+    end
+end</pre>
+<p></p>
+<h3>CODE 指令解說</h3>
+<p>部分LUA指令講解</p>
+<p><strong>1.sim.getObjectHandle</strong></p>
+<p>使用範例如下</p>
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">XXX=sim.getObjectHandle('joint')</pre>
+<p>講解 XXX為一個自行定義的名詞，此指令為定義XXX為一個連接軸，而('joint')為該軸在場景裡面的名稱</p>
+<p></p>
+<p><strong>2.sim.setJointTargetPosition</strong></p>
+<p><span>使用範例如下</span></p>
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">sim.setJointTargetPosition(XXX,90)</pre>
+<p>講解 XXX移動至90這個位置，或旋轉至90rad，XXX請參見第一個指令講解,角度預設為RAD</p>
+<p>若要需求為旋轉至90deg，指令參考如下</p>
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">sim.setJointTargetPosition(XXX,90*math.pi/180)</pre>
+<p></p>
+<p><strong>3.sim.getSimulatorMessage</strong></p>
+<p>使用範例如下</p>
+<pre class="brush:lua;auto-links:false;toolbar:false" contenteditable="false">message,auxiliaryData=sim.getSimulatorMessage()
+while message~=-1 do
+        if (message==sim.message_keypress) then
+            if (auxiliaryData[1]==2009) then
+               指定要做的事情
+            end
+         end
+message,auxiliaryData=sim.getSimulatorMessage()
+end
+</pre>
+<p></p>
+<p>講解</p>
+<p>第一行</p>
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">message,auxiliaryData=sim.getSimulatorMessage()</pre>
+<p>message代表跟鍵盤對接的狀態</p>
+<p>auxiliaryData代表讀取到鍵盤的值</p>
+<p>第二行的開始</p>
+<p>當(while)"message的值不等於-1時</p>
+<p>若(if)<span>auxiliaryData讀取到的值為2009</span></p>
+<p><span>進行要做的事情，可以是上面第二項"sim.setJointTargetPosition"或其他指令</span></p>
+<p><span>可參考<a href="https://40823225.github.io/stage3-bg6/content/%E5%B0%8B%E6%89%BE%E6%8E%A7%E5%88%B6%E4%BB%A3%E7%A2%BC.html">尋找控制代碼</a></span></p>
+<p><span></span></p>
+<p><strong>4.simwat</strong></p>
+<p><span>使用範例</span></p>
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">sim.wait(0.01)</pre>
+<p>只能在線程控制中使用(Threaded chil script)</p>
+<p>為暫停指令，括弧內單位為秒</p>
+<h3>remoteApi python 指令對照</h3>
+<p><strong>1.simxGetObjectHandle</strong></p>
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">ret,XXX=vrep.simxGetObjectHandle(clientID,"joint",opmode)</pre>
+<p><span>XXX為一個自行定義的名詞，此指令為定義XXX為一個連接軸，而('joint')為該軸在場景裡面的名稱</span></p>
+<p>與Lua語法類似</p>
+<p><strong>2.simxSetJointTargetPosition</strong></p>
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false"> vrep.simxSetJointTargetPosition(clientID,XXX,90,opmode)</pre>
+<p>講解 XXX移動至90這個位置，或旋轉至90rad，XXX請參見第一個指令講解,角度預設為RAD</p>
+<p>若要需求為旋轉至90deg，指令參考如下</p>
+<p><span>與Lua語法類似</span></p>
+<h3>機械手臂設定範例</h3>
 <p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/s8eRsonlKHo" width="560"></iframe></p>
+<p></p>
+<h3>按鍵控制代碼</h3>
+<table border="1" cellpadding="0" cellspacing="0" style="width: 590px;">
+<tbody>
+<tr style="height: 26px;">
+<td style="width: 40px; height: 26px; text-align: center;"><strong>按鍵</strong></td>
+<td style="width: 71px; height: 26px; text-align: center;">對應代碼</td>
+<td style="width: 34px; height: 26px; text-align: center;"><strong>按鍵</strong></td>
+<td style="width: 69px; height: 26px; text-align: center;"><span>對應代碼</span></td>
+<td style="width: 45px; height: 26px; text-align: center;"><strong>按鍵</strong></td>
+<td style="width: 64px; height: 26px; text-align: center;"><span>對應代碼</span></td>
+<td style="width: 50px; height: 26px; text-align: center;"><strong>按鍵</strong></td>
+<td style="width: 71px; height: 26px; text-align: center;"><span>對應代碼</span></td>
+<td style="width: 42px; height: 26px; text-align: center;"><strong>按鍵</strong></td>
+<td style="width: 62px; height: 26px; text-align: center;"><span>對應代碼</span></td>
+<td style="width: 40.9271px; height: 26px; text-align: center;"><strong>按鍵</strong></td>
+<td style="width: 74.0729px; height: 26px; text-align: center;"><span>對應代碼</span></td>
+</tr>
+<tr style="height: 26px;">
+<td style="width: 40px; height: 26px; text-align: center;"><strong>a</strong></td>
+<td style="width: 71px; height: 26px; text-align: center;">97</td>
+<td style="width: 34px; height: 26px; text-align: center;"><strong>j</strong></td>
+<td style="width: 69px; height: 26px; text-align: center;">106</td>
+<td style="width: 45px; height: 26px; text-align: center;"><strong>s</strong></td>
+<td style="width: 64px; height: 26px; text-align: center;">115</td>
+<td style="width: 50px; height: 26px; text-align: center;"><strong>0</strong></td>
+<td style="width: 71px; height: 26px; text-align: center;">48</td>
+<td style="width: 42px; height: 26px; text-align: center;"><strong>9</strong></td>
+<td style="width: 62px; height: 26px; text-align: center;">57</td>
+<td style="width: 40.9271px; height: 26px; text-align: center;"><strong>.</strong></td>
+<td style="width: 74.0729px; height: 26px; text-align: center;">46</td>
+</tr>
+<tr style="height: 26px;">
+<td style="width: 40px; height: 26px; text-align: center;"><strong>b</strong></td>
+<td style="width: 71px; height: 26px; text-align: center;">98</td>
+<td style="width: 34px; height: 26px; text-align: center;"><strong>k</strong></td>
+<td style="width: 69px; height: 26px; text-align: center;">107</td>
+<td style="width: 45px; height: 26px; text-align: center;"><strong>t</strong></td>
+<td style="width: 64px; height: 26px; text-align: center;">116</td>
+<td style="width: 50px; height: 26px; text-align: center;"><strong>1</strong></td>
+<td style="width: 71px; height: 26px; text-align: center;">49</td>
+<td style="width: 42px; height: 26px; text-align: center;"><strong>+</strong></td>
+<td style="width: 62px; height: 26px; text-align: center;">43</td>
+<td style="width: 40.9271px; height: 26px; text-align: center;"><strong>;</strong></td>
+<td style="width: 74.0729px; height: 26px; text-align: center;">59</td>
+</tr>
+<tr style="height: 26px;">
+<td style="width: 40px; height: 26px; text-align: center;"><strong>c</strong></td>
+<td style="width: 71px; height: 26px; text-align: center;">99</td>
+<td style="width: 34px; height: 26px; text-align: center;"><strong>l</strong></td>
+<td style="width: 69px; height: 26px; text-align: center;">108</td>
+<td style="width: 45px; height: 26px; text-align: center;"><strong>u</strong></td>
+<td style="width: 64px; height: 26px; text-align: center;">117</td>
+<td style="width: 50px; height: 26px; text-align: center;"><strong>2</strong></td>
+<td style="width: 71px; height: 26px; text-align: center;">50</td>
+<td style="width: 42px; height: 26px; text-align: center;"><strong>-</strong></td>
+<td style="width: 62px; height: 26px; text-align: center;">45</td>
+<td style="width: 40.9271px; height: 26px; text-align: center;"><strong>'</strong></td>
+<td style="width: 74.0729px; height: 26px; text-align: center;">39</td>
+</tr>
+<tr style="height: 26px;">
+<td style="width: 40px; height: 26px; text-align: center;"><strong>d</strong></td>
+<td style="width: 71px; height: 26px; text-align: center;">100</td>
+<td style="width: 34px; height: 26px; text-align: center;"><strong>m</strong></td>
+<td style="width: 69px; height: 26px; text-align: center;">109</td>
+<td style="width: 45px; height: 26px; text-align: center;"><strong>v</strong></td>
+<td style="width: 64px; height: 26px; text-align: center;">118</td>
+<td style="width: 50px; height: 26px; text-align: center;"><strong>3</strong></td>
+<td style="width: 71px; height: 26px; text-align: center;">51</td>
+<td style="width: 42px; height: 26px; text-align: center;"><strong>*</strong></td>
+<td style="width: 62px; height: 26px; text-align: center;">42</td>
+<td style="width: 40.9271px; height: 26px; text-align: center;"><strong>[</strong></td>
+<td style="width: 74.0729px; height: 26px; text-align: center;">91</td>
+</tr>
+<tr style="height: 28px;">
+<td style="width: 40px; height: 28px; text-align: center;"><strong>e</strong></td>
+<td style="width: 71px; height: 28px; text-align: center;">101</td>
+<td style="width: 34px; height: 28px; text-align: center;"><strong>n</strong></td>
+<td style="width: 69px; height: 28px; text-align: center;">110</td>
+<td style="width: 45px; height: 28px; text-align: center;"><strong>w</strong></td>
+<td style="width: 64px; height: 28px; text-align: center;">119</td>
+<td style="width: 50px; height: 28px; text-align: center;"><strong>4</strong></td>
+<td style="width: 71px; height: 28px; text-align: center;">52</td>
+<td style="width: 42px; height: 28px; text-align: center;"><strong>/</strong></td>
+<td style="width: 62px; height: 28px; text-align: center;">47</td>
+<td style="width: 40.9271px; height: 28px; text-align: center;"><strong>]</strong></td>
+<td style="width: 74.0729px; height: 28px; text-align: center;">93</td>
+</tr>
+<tr style="height: 28.1597px;">
+<td style="width: 40px; height: 28.1597px; text-align: center;"><strong>f</strong></td>
+<td style="width: 71px; height: 28.1597px; text-align: center;">102</td>
+<td style="width: 34px; height: 28.1597px; text-align: center;"><strong>o</strong></td>
+<td style="width: 69px; height: 28.1597px; text-align: center;">111</td>
+<td style="width: 45px; height: 28.1597px; text-align: center;"><strong>x</strong></td>
+<td style="width: 64px; height: 28.1597px; text-align: center;">120</td>
+<td style="width: 50px; height: 28.1597px; text-align: center;"><strong>5</strong></td>
+<td style="width: 71px; height: 28.1597px; text-align: center;">53</td>
+<td style="width: 42px; height: 28.1597px; text-align: center;"><strong>=</strong></td>
+<td style="width: 62px; height: 28.1597px; text-align: center;">61</td>
+<td style="width: 40.9271px; height: 28.1597px; text-align: center;"><strong>方向鍵上</strong></td>
+<td style="width: 74.0729px; height: 28.1597px; text-align: center;">2007</td>
+</tr>
+<tr style="height: 28px;">
+<td style="width: 40px; height: 28px; text-align: center;"><strong>g</strong></td>
+<td style="width: 71px; height: 28px; text-align: center;">103</td>
+<td style="width: 34px; height: 28px; text-align: center;"><strong>p</strong></td>
+<td style="width: 69px; height: 28px; text-align: center;">112</td>
+<td style="width: 45px; height: 28px; text-align: center;"><strong>y</strong></td>
+<td style="width: 64px; height: 28px; text-align: center;">121</td>
+<td style="width: 50px; height: 28px; text-align: center;"><strong>6</strong></td>
+<td style="width: 71px; height: 28px; text-align: center;">54</td>
+<td style="width: 42px; height: 28px; text-align: center;"><strong>`</strong></td>
+<td style="width: 62px; height: 28px; text-align: center;">96</td>
+<td style="width: 40.9271px; height: 28px; text-align: center;"><strong>方向鍵下</strong></td>
+<td style="width: 74.0729px; height: 28px; text-align: center;">2008</td>
+</tr>
+<tr style="height: 28px;">
+<td style="width: 40px; height: 28px; text-align: center;"><strong>h</strong></td>
+<td style="width: 71px; height: 28px; text-align: center;">104</td>
+<td style="width: 34px; height: 28px; text-align: center;"><strong>q</strong></td>
+<td style="width: 69px; height: 28px; text-align: center;">113</td>
+<td style="width: 45px; height: 28px; text-align: center;"><strong>z</strong></td>
+<td style="width: 64px; height: 28px; text-align: center;">122</td>
+<td style="width: 50px; height: 28px; text-align: center;"><strong>7</strong></td>
+<td style="width: 71px; height: 28px; text-align: center;">55</td>
+<td style="width: 42px; height: 28px; text-align: center;"><strong>\</strong></td>
+<td style="width: 62px; height: 28px; text-align: center;">92</td>
+<td style="width: 40.9271px; height: 28px; text-align: center;"><strong>方向鍵左</strong></td>
+<td style="width: 74.0729px; height: 28px; text-align: center;">2009</td>
+</tr>
+<tr style="height: 28px;">
+<td style="width: 40px; height: 28px; text-align: center;"><strong>i</strong></td>
+<td style="width: 71px; height: 28px; text-align: center;">105</td>
+<td style="width: 34px; height: 28px; text-align: center;"><strong>r</strong></td>
+<td style="width: 69px; height: 28px; text-align: center;">114</td>
+<td style="width: 45px; height: 28px; text-align: center;">空白鍵</td>
+<td style="width: 64px; height: 28px; text-align: center;">32</td>
+<td style="width: 50px; height: 28px; text-align: center;"><strong>8</strong></td>
+<td style="width: 71px; height: 28px; text-align: center;">56</td>
+<td style="width: 42px; height: 28px; text-align: center;"><strong>,</strong></td>
+<td style="width: 62px; height: 28px; text-align: center;">44</td>
+<td style="width: 40.9271px; height: 28px; text-align: center;"><strong>方向鍵右</strong></td>
+<td style="width: 74.0729px; height: 28px; text-align: center;">2010</td>
+</tr>
+</tbody>
+</table>
+<p></p>
 <h2>期末全班直播教學</h2>
 <p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/GUUKSgN93eI" width="560"></iframe></p>
 <p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/gZd9KlVS9BI" width="560"></iframe><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/Zu_0BvZfxgQ" width="560"></iframe></p>
