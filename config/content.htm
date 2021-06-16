@@ -5,8 +5,11 @@
 <p>你現在看到的是我在大學甚至未來或者過去的一些紀錄</p>
 <p>若想要跟我聯絡的可以寄信到lin.hybrian@gmail.com</p>
 <p>我看到就會回喔</p>
+<p></p>
+<p>下圖為我任職於國樂社第39屆社長時拍的照片</p>
 <p><img alt="" height="800" src="/images/大頭照.jpg" width="600"/></p>
-<p>上圖為我任職於國樂社第39屆社長時拍的照片</p><h1>二下</h1>
+<p></p>
+<h1>二下</h1>
 <h2>arduino 機械手臂</h2>
 <p>概述:</p>
 <p>用PS2手把控制，可以使用arduino有一個PS2的函式庫(PS2X_lib.h)進行控制</p>
@@ -25,7 +28,27 @@
 <p>但是在越用越多的時候</p>
 <p>發現Coppelasim好像比想像中的還要重要</p>
 <p>可以在電腦模擬出幾近真實的機械手臂運動</p>
-<p>我期許我未來能在自己學習有關Coppeliasim的相關應用</p><h2>架設場景</h2>
+<p>我期許我未來能在自己學習有關Coppeliasim的相關應用</p>
+<p></p>
+<p><strong>為甚麼要使用模擬軟體而不直接進行實體的操控?</strong></p>
+<p><strong>模擬相對直接操控有什麼優勢?</strong></p>
+<p>使用模擬可以避免在進行實機操作時可能會出現的一些問題</p>
+<p>透過模擬我們可以很直觀的看到機器人模擬的狀況</p>
+<p>再進一步修正運動軌跡或者是零件形狀</p>
+<p>上述功能在進行機器人開發的時候可以有效的避免資源的浪費及減少所需的時間</p>
+<p>其次</p>
+<p>在自動化生產線上</p>
+<p>常會有10-100個機械手臂同時在工作</p>
+<p>而我們可以在Coppeliasim中架設生產線並進行模擬</p>
+<p>並且檢視生產線的運轉狀況</p>
+<p>一來可以減少生產線架設完成後還需要進行改動的可能性</p>
+<p>二來可以檢視是否每隻機械手臂的運動參數都是正確的</p>
+<p>是一個一舉多得的例子</p>
+<p>再者</p>
+<p>當今天在跟客戶不論是進行產品開發又或者是在像客戶進行功能演示的時候</p>
+<p>可以在一設計完成並且還沒進行零件加工前</p>
+<p>直接與客戶演示產品所可以呈現的樣子與其功能性</p>
+<p>客戶方也可以很清楚看到機器人(機台)所展現出來的功能是不是她所需的</p><h2>架設場景</h2>
 <h3>對軸進行旋轉控制</h3>
 <p>使用coppeliaSim 先叫出一個簡單的軸</p>
 <p>來進行模擬控制</p>
@@ -3068,7 +3091,8 @@ int main(){
 <h1>個人紀錄</h1>
 <p>.</p>
 <h2>台中高工畢業專題</h2>
-<p><iframe frameborder="0" height="150" src="http://docs.google.com/gview?url=https://drive.google.com/file/d/1YkDkmZ1Z-ZhFlhVY3P5j3NdzRFrbVyNq/view?usp=sharing" style="width: 718px; height: 700px;" width="300"></iframe></p><h2>CoppeliaSim 教學</h2>
+<p><iframe frameborder="0" height="150" src="https://drive.google.com/file/d/1YkDkmZ1Z-ZhFlhVY3P5j3NdzRFrbVyNq/view?usp=sharing" style="width: 718px; height: 700px;" width="300"></iframe></p>
+<h2>CoppeliaSim 教學</h2>
 <h3>軸的旋轉教學</h3>
 <p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/-8QNOsZnV1c" width="560"></iframe></p>
 <p>注意事項:在旋轉軸中預設的角度單位為弧度(rad)</p>
@@ -3082,7 +3106,8 @@ end
 function sysCall_actuation()
     -- put your actuation code here
     sim.setJointTargetPosition(joint,135*math.pi/180)
-end</pre><h3>直線運動教學</h3>
+end</pre>
+<h3>直線運動教學</h3>
 <p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/KHClnqMEHfU" width="560"></iframe></p>
 <p>程式指令</p>
 <pre class="brush:lua;auto-links:false;toolbar:false" contenteditable="false">function sysCall_init()
